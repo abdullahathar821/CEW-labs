@@ -1,0 +1,148 @@
+#include <stdio.h>
+
+// Question 1
+
+int main(int argc, char **argv)
+{   
+    long employeeID;
+    int totalHours;
+    float hourlyPay;
+    
+	printf("Enter Employee ID: ");
+    scanf("%ld", &employeeID);
+    
+    printf("Enter total hours worked in this month: ");
+    scanf("%d", &totalHours);
+    
+    printf("Enter hourly pay: ");
+    scanf("%f", &hourlyPay);
+    
+    printf("Employee ID: %ld\nMonthly Salary: $%.2f", employeeID, hourlyPay*totalHours);
+}
+
+//Question 2
+
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{   
+    
+    float heigt;
+    float width;
+    
+    printf("Enter the height of the triangle: ");
+    scanf("%f", &height);
+    
+    printf("Enter the width of the triangle: ");
+    scanf("%f", &width);
+    
+    printf("\nArea: %f", height*width);
+    printf("Area: %f", height*2 + width*2);
+    
+}
+
+//Question 3
+
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{   
+    
+    float height;
+    printf("Enter your height in cm: ");
+    scanf("%f", &height);
+    
+    if (height < 150) {
+        printf("Dwarf");
+        }
+    else if (height == 150) {
+        printf("Average");
+        }
+    else {
+        printf("Tall");
+        }
+    
+}
+
+//Question 4
+
+#include <stdio.h>
+
+void binaryConverter(int userInt)
+ {
+     
+    if (userInt == 0) {
+         printf("0");
+         return;
+         }
+    
+    int binary[32];
+    int index = 0;
+    
+    while (userInt > 0 ) {
+        
+        binary[index] = userInt % 2;
+        index++;
+        userInt = userInt / 2;
+        }
+    
+    for(int i = index - 1; i >= 0; i--) {
+        printf("%d", binary[i]);
+        }
+    
+}
+
+int main(int argc, char **argv)
+{   
+    binaryConverter(112);
+    
+}
+
+//Question 5
+
+#include <stdio.h>
+
+// Function to calculate the nth Fibonacci number
+int fibonacci(int n) {
+    if (n <= 0) {
+        return 0;
+    } else if (n == 1) {
+        return 1;
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
+
+// Function to print the Fibonacci series up to the nth number
+void printFibonacciSeries(int n) {
+    if (n <= 0) {
+        printf("Invalid input. Please enter a positive number.\n");
+        return;
+    }
+
+    printf("Fibonacci Series: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", fibonacci(i));
+    }
+    printf("\n");
+}
+
+int main() {
+    int n;
+
+    printf("Enter the value of n to calculate the nth Fibonacci number and print the series: ");
+    scanf("%d", &n);
+
+    if (n < 0) {
+        printf("Invalid input. Please enter a non-negative number.\n");
+    } else {
+        int result = fibonacci(n);
+        printf("The %dth Fibonacci number is: %d\n", n, result);
+        printFibonacciSeries(n);
+    }
+
+    return 0;
+}
+
+
+
