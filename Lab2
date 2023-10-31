@@ -1,0 +1,197 @@
+//Question 1
+#include <stdio.h>
+  
+int main() {
+    
+    int n;
+    int counter = 0;
+    printf("Enter the value of n: ");
+    scanf("%d", &n);
+    
+    for(int i = 0; i <= n; i++) {
+        if (i % 2) {
+            printf("%d ", i);
+            counter += i;
+            }
+    
+        }
+        
+    printf("\nSum of the first %d odd numbers: %d", n, counter);
+
+}
+    
+//Question 2
+#include <stdio.h>
+  
+int main() {
+    
+    int n;
+    
+    printf("Enter the number of lines: ");
+    scanf("%d", &n);
+    
+    //lines
+    for(int i = 1; i <= n; i++){
+        //spaces
+        for(int j = 0; j <= n-i; j++) {
+            printf(" ");
+            }
+        //asterisk
+        for(int k = 0; k < i; k++) {
+            printf("* ");
+            }
+        printf("\n");
+        }
+}
+
+//Question 3
+#include <stdio.h>
+  
+int main() {
+    
+    char str1[100];
+    char str2[100];
+    
+    printf("Enter the first string: ");
+    scanf("%s", str1);
+    printf("Enter the second string: ");
+    scanf("%s", str2);
+    
+    int i = 0;
+    
+    while(str1[i] != '\0' && str2[i] != '\0') {
+        if (str1[i] != str2[i]) {
+            printf("Unequal...\n");
+            return 0;            
+            }
+        i++;
+        }
+    if (str1[i] != '\0' && str2[i] != '\0') {
+        printf("Equal");
+        } else {
+            printf("Unequal");
+            }
+    return 0;
+}
+    
+
+//Question 4
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    char userInput[100];
+
+    printf("Enter a sentence: ");
+    fgets(userInput, sizeof(userInput), stdin);
+
+    printf("Before: %s", userInput);
+
+    for (int i = 0; i < strlen(userInput); i++) {
+        if ('A' <= userInput[i] && userInput[i] <= 'Z') {
+            userInput[i] = tolower(userInput[i]);
+        } else if ('a' <= userInput[i] && userInput[i] <= 'z') {
+            userInput[i] = toupper(userInput[i]);
+        }
+    }
+
+    printf("After: %s", userInput);
+
+    return 0;
+}
+
+
+
+//Question 5
+#include <stdio.h>
+
+int main() {
+    int array[] = {1, 2, 3, 3, 4, 5, 6, 6, 6, 7, 7, 8, 9};
+    int distinct[100];
+    int count = 0;
+
+
+    for (int i = 0; i < sizeof(array) / sizeof(array[0]); i++) {
+        int isDistinct = 1;
+
+        for (int j = 0; j < count; j++) {
+            if (array[i] == distinct[j]) {
+                isDistinct = 0;
+                break;
+            }
+        }
+
+        if (isDistinct) {
+            distinct[count] = array[i];
+            count++;
+        }
+    }
+
+    printf("Distinct elements: ");
+    for (int i = 0; i < count; i++) {
+        printf("%d ", distinct[i]);
+    }
+
+    return 0;
+}
+
+//Question 6
+#include <stdio.h>
+
+struct Distance {
+    int feet;
+    float inches;
+};
+
+struct Distance addDistances(struct Distance d1, struct Distance d2) {
+    struct Distance result;
+    result.feet = d1.feet + d2.feet;
+    result.inches = d1.inches + d2.inches;
+    if (result.inches >= 12.0) {
+        result.inches -= 12.0;
+        result.feet++;
+    }
+    return result;
+}
+
+int main() {
+    struct Distance distance1, distance2, sum;
+    printf("Enter the first distance:\n");
+    printf("Feet: ");
+    scanf("%d", &distance1.feet);
+    printf("Inches: ");
+    scanf("%f", &distance1.inches);
+    printf("Enter the second distance:\n");
+    printf("Feet: ");
+    scanf("%d", &distance2.feet);
+    printf("Inches: ");
+    scanf("%f", &distance2.inches);
+    sum = addDistances(distance1, distance2);
+    printf("Sum of distances: %d feet %.2f inches\n", sum.feet, sum.inches);
+    return 0;
+}
+
+//Addtional Task --> Print pyrimid in opposite direction
+#include <stdio.h>
+  
+int main() {
+    
+    int n;
+    
+    printf("Enter the number of lines: ");
+    scanf("%d", &n);
+    
+    //lines
+    for(int i = 0; i <= n; i++){
+        //spaces
+        for(int j = 0; j <= i; j++) {
+            printf(" ");
+            }
+        //asterisk
+        for(int k = 0; k < n-i; k++) {
+            printf("* ");
+            }
+        printf("\n");
+        }
+}
