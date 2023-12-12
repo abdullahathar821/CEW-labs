@@ -1,0 +1,119 @@
+Question 1
+#include <stdio.h>
+
+int main() {
+    FILE *file;
+
+    file = fopen("example.txt", "w");
+    fprintf(file, "This is some initial text in the file.\n");
+    fclose(file);
+
+    file = fopen("example.txt", "a");
+    fprintf(file, "This is additional text appended to the file.\n");
+    fclose(file);
+
+    file = fopen("example.txt", "r");
+    char ch;
+    while ((ch = fgetc(file)) != EOF) {
+        putchar(ch);
+    }
+    fclose(file);
+
+    return 0;
+}
+
+Question 2
+#include <stdio.h>
+
+int countWords(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        return -1;
+    }
+
+    int count = 0;
+    char ch;
+    while ((ch = fgetc(file)) != EOF) {
+        if (ch == ' ' || ch == '\n' || ch == '\t') {
+            count++;
+        }
+    }
+
+    fclose(file);
+    return count;
+}
+
+int main() {
+    const char *filename = "example.txt";
+    int wordCount = countWords(filename);
+
+    if (wordCount != -1) {
+        printf("Total number of words in '%s': %d\n", filename, wordCount);
+    } else {
+        printf("File '%s' not found.\n", filename);
+    }
+
+    return 0;
+}
+
+Question 3
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Student {
+    char name[50];
+    char roll[10];
+    char grade[2];
+};
+
+void addStudent(const char *filename, const char *name, const char *roll, const char *grade) {
+    FILE *file = fopen(filename, "a");
+    fprintf(file, "%s,%s,%s\n", name, roll, grade);
+    fclose(file);
+}
+
+void deleteStudent(const char *filename, const char *roll) {
+    FILE *input = fopen(filename, "r");
+    FILE *output = fopen("temp.txt", "w");
+
+    char line[100];
+    while (fgets(line, sizeof(line), input) != NULL) {
+        if (strstr(line, roll) == NULL) {
+            fputs(line, output);
+        }
+    }
+
+    fclose(input);
+    fclose(output);
+
+    remove(filename);
+    rename("temp.txt", filename);
+}
+
+void displayStudents(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    struct Student student;
+
+    printf("Student Records:\n");
+    while (fscanf(file, "%[^,],%[^,],%[^\n]\n", student.name, student.roll, student.grade) != EOF) {
+        printf("Name: %s, Roll: %s, Grade: %s\n", student.name, student.roll, student.grade);
+    }
+
+    fclose(file);
+}
+
+int main() {
+    const char *filename = "students.txt";
+
+    addStudent(filename, "Alice", "101", "A");
+    addStudent(filename, "Bob", "102", "B");
+
+    displayStudents(filename);
+
+    deleteStudent(filename, "102");
+
+    displayStudents(filename);
+
+    return 0;
+}
+
