@@ -1,0 +1,305 @@
+Question 1
+
+// file_operations.h
+
+#ifndef FILE_OPERATIONS_H
+#define FILE_OPERATIONS_H
+
+#include <stdio.h>
+
+int readFromFile(const char *filename, char *buffer, size_t size);
+int writeToFile(const char *filename, const char *text);
+int fileExists(const char *filename);
+
+#endif // FILE_OPERATIONS_H
+
+// file_operations.c
+
+#include "file_operations.h"
+
+int readFromFile(const char *filename, char *buffer, size_t size) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        return -1; // File not found
+    }
+
+    size_t bytesRead = fread(buffer, 1, size - 1, file);
+    buffer[bytesRead] = '\0';
+
+    fclose(file);
+    return bytesRead;
+}
+
+int writeToFile(const char *filename, const char *text) {
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) {
+        return -1; // Unable to open file for writing
+    }
+
+    fprintf(file, "%s", text);
+
+    fclose(file);
+    return 0;
+}
+
+int fileExists(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        return 0; // File does not exist
+    }
+
+    fclose(file);
+    return 1; // File exists
+}
+
+
+Question 2
+// linked_list.c
+
+#include "linked_list.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+Node *createNode(int data) {
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    if (newNode != NULL) {
+        newNode->data = data;
+        newNode->next = NULL;
+    }
+    return newNode;
+}
+
+void insertNode(Node **head, int data) {
+    Node *newNode = createNode(data);
+    if (newNode != NULL) {
+        newNode->next = *head;
+        *head = newNode;
+    }
+}
+
+void deleteNode(Node **head, int data) {
+    Node *current = *head;
+    Node *previous = NULL;
+
+    while (current != NULL && current->data != data) {
+        previous = current;
+        current = current->next;
+    }
+
+    if (current != NULL) {
+        if (previous != NULL) {
+            previous->next = current->next;
+        } else {
+            *head = current->next;
+        }
+
+        free(current);
+    }
+}
+
+void displayList(Node *head) {
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+// linked_list.c
+
+#include "linked_list.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+Node *createNode(int data) {
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    if (newNode != NULL) {
+        newNode->data = data;
+        newNode->next = NULL;
+    }
+    return newNode;
+}
+
+void insertNode(Node **head, int data) {
+    Node *newNode = createNode(data);
+    if (newNode != NULL) {
+        newNode->next = *head;
+        *head = newNode;
+    }
+}
+
+void deleteNode(Node **head, int data) {
+    Node *current = *head;
+    Node *previous = NULL;
+
+    while (current != NULL && current->data != data) {
+        previous = current;
+        current = current->next;
+    }
+
+    if (current != NULL) {
+        if (previous != NULL) {
+            previous->next = current->next;
+        } else {
+            *head = current->next;
+        }
+
+        free(current);
+    }
+}
+
+void displayList(Node *head) {
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+Question 3
+// matrix_operations.h
+
+#ifndef MATRIX_OPERATIONS_H
+#define MATRIX_OPERATIONS_H
+
+typedef struct {
+    int rows;
+    int cols;
+    int **data;
+} Matrix;
+
+Matrix createMatrix(int rows, int cols);
+void freeMatrix(Matrix *matrix);
+Matrix addMatrices(Matrix A, Matrix B);
+Matrix multiplyMatrices(Matrix A, Matrix B);
+Matrix transposeMatrix(Matrix A);
+int determinantMatrix(Matrix A);
+
+#endif // MATRIX_OPERATIONS_H
+
+// matrix_operations.c
+
+#include "matrix_operations.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+Matrix createMatrix(int rows, int cols) {
+    Matrix matrix;
+    matrix.rows = rows;
+    matrix.cols = cols;
+
+    matrix.data = (int **)malloc(rows * sizeof(int *));
+    for (int i = 0; i < rows; ++i) {
+        matrix.data[i] = (int *)malloc(cols * sizeof(int));
+    }
+
+    return matrix;
+}
+
+void freeMatrix(Matrix *matrix) {
+    for (int i = 0; i < matrix->rows; ++i) {
+        free(matrix->data[i]);
+    }
+    free(matrix->data);
+}
+
+Matrix addMatrices(Matrix A, Matrix B) {
+    if (A.rows != B.rows || A.cols != B.cols) {
+        // Matrices must have the same dimensions for addition
+        printf("Error: Matrices must have the same dimensions for addition.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Matrix result = createMatrix(A.rows, A.cols);
+
+    for (int i = 0; i < A.rows; ++i) {
+        for (int j = 0; j < A.cols; ++j) {
+            result.data[i][j] = A.data[i][j] + B.data[i][j];
+        }
+    }
+
+    return result;
+}
+
+Matrix multiplyMatrices(Matrix A, Matrix B) {
+    if (A.cols != B.rows) {
+        // Number of columns in A must be equal to the number of rows in B for multiplication
+        printf("Error: Number of columns in the first matrix must be equal to the number of rows in the second matrix for multiplication.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Matrix result = createMatrix(A.rows, B.cols);
+
+    for (int i = 0; i < A.rows; ++i) {
+        for (int j = 0; j < B.cols; ++j) {
+            result.data[i][j] = 0;
+            for (int k = 0; k < A.cols; ++k) {
+                result.data[i][j] += A.data[i][k] * B.data[k][j];
+            }
+        }
+    }
+
+    return result;
+}
+
+Matrix transposeMatrix(Matrix A) {
+    Matrix result = createMatrix(A.cols, A.rows);
+
+    for (int i = 0; i < A.rows; ++i) {
+        for (int j = 0; j < A.cols; ++j) {
+            result.data[j][i] = A.data[i][j];
+        }
+    }
+
+    return result;
+}
+
+// Helper function for determinant calculation
+int determinantRecursion(int **mat, int n) {
+    if (n == 1) {
+        return mat[0][0];
+    }
+
+    if (n == 2) {
+        return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];
+    }
+
+    int det = 0;
+    for (int k = 0; k < n; k++) {
+        det += ((k % 2 == 0 ? 1 : -1) * mat[0][k] * determinantRecursion(mat + 1, n - 1));
+    }
+
+    return det;
+}
+
+int determinantMatrix(Matrix A) {
+    if (A.rows != A.cols) {
+        // Matrix must be square for determinant calculation
+        printf("Error: Matrix must be square for determinant calculation.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return determinantRecursion(A.data, A.rows);
+}
+
+// main_matrix_operations.c
+
+#include <stdio.h>
+#include "matrix_operations.h"
+
+int main() {
+    // Create matrices
+    Matrix A = createMatrix(2, 3);
+    A.data[0][0] = 1; A.data[0][1] = 2; A.data[0][2] = 3;
+    A.data[1][0] = 4; A.data[1][1] = 5; A.data[1][2] = 6;
+
+    Matrix B = createMatrix(3, 2);
+    B.data[0][0] = 7; B.data[0][1] = 8;
+    B.data[1][0] = 9; B.data[1][1] = 10;
+    B.data[2][0] = 11; B.data[2][1] = 12;
+
+    // Display matrices
+    printf("Matrix A:\n");
+    for (int i = 0; i < A.rows; ++i) {
+        for (int j = 0; j < A.cols; ++j) {
+            printf
